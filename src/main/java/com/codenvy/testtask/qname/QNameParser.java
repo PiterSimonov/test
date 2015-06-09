@@ -1,4 +1,4 @@
-package com.codenvy.testtask.qname;
+package main.java.com.codenvy.testtask.qname;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,7 +12,7 @@ public class QNameParser {
             "[\\p{ASCII}&&[^/:'\\u0022\\s\\Q.[]*|\\E]]+)+)(?!\\u0020)\\z";
     private final String PREFIX_REGEX = "\\A(?!((X|x)(M|m)(L|l)))[\\p{Alpha}_]+[\\p{Alnum}\\u002E_-]*$";
 
-    QName parse(String name) throws IllegalNameException {
+    public QName parse(String name) throws IllegalNameException {
         String prefix = null;
         String qName;
         if (name.equals("")) throw new IllegalNameException("empty name");

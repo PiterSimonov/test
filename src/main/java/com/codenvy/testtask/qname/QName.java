@@ -1,4 +1,4 @@
-package com.codenvy.testtask.qname;
+package main.java.com.codenvy.testtask.qname;
 
 public class QName {
     private String prefix;
