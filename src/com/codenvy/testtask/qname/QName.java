@@ -4,6 +4,9 @@ public class QName {
     private String prefix;
     private String localName;
 
+    public QName() {
+    }
+
     public QName(String prefix, String localName) {
         this.prefix = prefix;
         this.localName = localName;

@@ -4,59 +4,35 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class QNameParser {
+    private final String LOCAL_NAME_REGEX = "\\A([\\p{ASCII}&&[^/:'\\u0022\\s\\Q[]*|\\E]]+\\u0020?" +
+            "[\\p{ASCII}&&[^/:'\\u0022\\s\\Q[]*|\\E]]+)+(?!\\u0020)\\z";
+    private final String SIMPLE_NAME_REGEX = "\\A(\\.?[\\p{ASCII}&&[^/:'\\u0022\\s\\Q.[]*|\\E]]+|" +
+            "[\\p{ASCII}&&[^/:'\\u0022\\s\\Q.[]*|\\E]]+\\.?|" +
+            "([\\p{ASCII}&&[^/:'\\u0022\\s\\Q.[]*|\\E]]+\\u0020?" +
+            "[\\p{ASCII}&&[^/:'\\u0022\\s\\Q.[]*|\\E]]+)+)(?!\\u0020)\\z";
+    private final String PREFIX_REGEX = "\\A(?!((X|x)(M|m)(L|l)))[\\p{Alpha}_]+[\\p{Alnum}\\u002E_-]*$";
 
-
-    static QName parse(String name) throws IllegalNameException {
+    QName parse(String name) throws IllegalNameException {
         String prefix = null;
         String qName;
-        if (name.equals("")) throw new IllegalNameException();
+        if (name.equals("")) throw new IllegalNameException("empty name");
         if (name.contains(":")) {
             String[] result = name.split(":");
-            if (result.length != 2) throw new IllegalNameException();
-            if (result[0].length() != 0 && isPrefixValidXMLName(result[0]) && isLocalNameValid(result[1])) {
+            if (result.length != 2) throw new IllegalNameException("invalid name");
+            if (result[0].length() != 0 && isValidName(result[0], PREFIX_REGEX) && isValidName(result[1], LOCAL_NAME_REGEX)) {
                 prefix = result[0];
                 qName = result[1];
-            } else throw new IllegalNameException();
-        }
-        else if (isSimpleNameValid(name)) qName = name;
-        else throw new IllegalNameException();
+            } else throw new IllegalNameException("invalid name");
+        } else if (isValidName(name, SIMPLE_NAME_REGEX)) qName = name;
+        else throw new IllegalNameException("invalid name");
 
         return new QName(prefix, qName);
     }
 
-    /**
-     * The method checks the correct prefix according to XML syntax.<br/>
-     * <p/>
-     * XML elements must follow these naming rules:<br/>
-     * - Element names are case-sensitive<br/>
-     * - Element names must start with a letter or underscore<br/>
-     * - Element names cannot start with the letters xml (or XML, or Xml, etc)<br/>
-     * - Element names can contain letters, digits, hyphens, underscores, and periods<br/>
-     * - Element names cannot contain spaces<br/>
-     * - Any name can be used, no words are reserved (except xml).<br/>
-     * SEE <a href="http://www.w3schools.com/xml/xml_elements.asp">trueLink</a>
-     */
-    private static boolean isPrefixValidXMLName(String prefix) {
-        Pattern pattern = Pattern.compile("\\A(?!((X|x)(M|m)(L|l)))[\\p{Alpha}_]+[\\p{Alnum}\\u002E_-]*$");
-        Matcher matcher = pattern.matcher(prefix);
+    private boolean isValidName(String name, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(name);
         return matcher.matches();
     }
-
-    private static boolean isLocalNameValid(String localName) {
-        String nonSpace = "[\\p{ASCII}&&[^/:'\\u0022\\s\\Q[]*|\\E]]+";
-        String regexName = nonSpace + "\\u0020?" + nonSpace;
-        Pattern pattern = Pattern.compile("\\A(" + regexName + ")+(?!\\u0020)\\z");
-        Matcher matcher = pattern.matcher(localName);
-        return matcher.matches();
-    }
-
-    private static boolean isSimpleNameValid(String simpleName) {
-        String nonSpace = "[\\p{ASCII}&&[^/:'\\u0022\\s\\Q.[]*|\\E]]+";
-        String regexName = nonSpace + "\\u0020?" + nonSpace;
-        Pattern pattern = Pattern.compile("\\A(\\.?" + nonSpace + "|" + nonSpace + "\\.?|(" + regexName + ")+)(?!\\u0020)\\z");
-        Matcher matcher = pattern.matcher(simpleName);
-        return matcher.matches();
-    }
-
 
 }
