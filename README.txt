@@ -1,4 +1,5 @@
-This is a project with QName class implementation (qualified name) and a parser for construct instances of QName
+This is a project with QName class implementation (qualified name) 
+and a parser for construct instances of QName
 
 QName realizations:
 String getPrefix (); - prefix
@@ -26,7 +27,7 @@ String syntax for name(BNF format):
    nonspace ::= (* Any Unicode character except: '/', ':', '[', ']', '*', ''', '"', '|'
                              or any whitespace character *)
 
-To build the project from the console you need (assuming installed Maven 4):
+To build the project from the console you need (assuming installed Maven 3):
 - Open the console
 - Go to the folder with the project (using the "cd" command in the Windows console) that contains the file pom.xml
 - Enter the command "mvn install"
