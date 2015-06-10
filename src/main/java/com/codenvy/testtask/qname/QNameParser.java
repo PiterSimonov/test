@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+package com.codenvy.testtask.qname;
+=======
 package main.java.com.codenvy.testtask.qname;
+>>>>>>> 1e01a236f7c36a898b87878c772293e9cb314c04
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +19,11 @@ public class QNameParser {
     public QName parse(String name) throws IllegalNameException {
         String prefix = null;
         String qName;
+<<<<<<< HEAD
+        if (name == null || name.equals("")) throw new IllegalNameException("empty name");
+=======
         if (name.equals("")) throw new IllegalNameException("empty name");
+>>>>>>> 1e01a236f7c36a898b87878c772293e9cb314c04
         if (name.contains(":")) {
             String[] result = name.split(":");
             if (result.length != 2) throw new IllegalNameException("invalid name");
