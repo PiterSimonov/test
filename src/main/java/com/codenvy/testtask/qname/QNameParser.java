@@ -15,17 +15,28 @@ public class QNameParser {
     public QName parse(String name) throws IllegalNameException {
         String prefix = null;
         String qName;
-        if (name == null || name.equals("")) throw new IllegalNameException("empty name");
+        if (name == null || name.equals("")) { 
+            throw new IllegalNameException("empty name");
+        }
         if (name.contains(":")) {
             String[] result = name.split(":");
-            if (result.length != 2) throw new IllegalNameException("invalid name");
-            if (result[0].length() != 0 && isValidName(result[0], PREFIX_REGEX) && isValidName(result[1], LOCAL_NAME_REGEX)) {
+            if (result.length != 2) {
+                throw new IllegalNameException("invalid name");
+            }
+            if (result[0].length() != 0 
+                  && isValidName(result[0], PREFIX_REGEX)
+                  && isValidName(result[1], LOCAL_NAME_REGEX)) {
                 prefix = result[0];
                 qName = result[1];
-            } else throw new IllegalNameException("invalid name");
-        } else if (isValidName(name, SIMPLE_NAME_REGEX)) qName = name;
-        else throw new IllegalNameException("invalid name");
-
+            } else {
+                throw new IllegalNameException("invalid name");
+            }
+        } else if (isValidName(name, SIMPLE_NAME_REGEX)){ 
+            qName = name;
+        } else {
+            throw new IllegalNameException("invalid name");
+        }
+        
         return new QName(prefix, qName);
     }
 
